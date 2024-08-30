@@ -1,0 +1,47 @@
+[
+  {
+    "project"       : "Lägga upp vårkampanjen",
+    "location"      : "Kommunal",
+    "status"        : "Ej startad",
+    "owner"         : "Roger L",
+    "assigned"         : "Anna R",
+    "members"       : [5, 12, 11],
+    "estimatedCost" : 1500000,
+    "cost"          : 123500,
+    "progress"      : 5,
+    "weight"        : 50,
+    "start"         : 0,
+    "startDate"     : "2024-03-31",
+    "icon"          : "pencil-ruler"
+  },
+  {
+    "project"       : "Synk mellan Magento och Fortnox",
+    "location"      : "Svenska Livräddningssällskapet",
+    "status"        : "Pågående",
+    "owner"         : "John W",
+    "assigned"      : "Daniel N",
+    "members"       : [7],
+    "estimatedCost" : 50000,
+    "cost"          : 51000,
+    "progress"      : 50,
+    "weight"        : 100,
+    "start"         : -4,
+    "startDate"     : "2024-03-15",
+    "icon"          : "pencil-ruler"
+  },
+  {
+    "project"       : "PGM OnDemand",
+    "location"      : "PGM",
+    "status"        : "Pågående",
+    "owner"         : "Peter L",
+    "assigned"      : "Daniel N",
+    "members"       : [3,7],
+    "estimatedCost" : 50000,
+    "cost"          : 51000,
+    "progress"      : 95,
+    "weight"        : 150,
+    "start"         : -4,
+    "startDate"     : "2020-12-01",
+    "icon"          : "pencil-ruler"
+  }
+]

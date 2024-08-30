@@ -1,0 +1,26 @@
+{
+  "name": "@boost/utils",
+  "version": "0.0.1",
+  "description": "Generic business-agnostic utils.",
+  "main": "dist/utils.umd.js",
+  "module": "dist/utils.es.js",
+  "types": "dist/types/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npx vue-tsc --project tsconfig.json",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@boost/eslint-config-boost": "workspace:*",
+    "@types/node": "20.14.10",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "8.56.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vue-tsc": "^2.0.21",
+    "vite": "^5.2.8"
+  }
+}

@@ -1,0 +1,35 @@
+<template>
+    <span class="add-button">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1"
+            viewBox="0 0 50 50" xml:space="preserve" width="32" height="32">
+            <circle style="fill:#43B05C;" cx="25" cy="25" r="25" />
+            <line
+                style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"
+                x1="25" y1="13" x2="25" y2="38" />
+            <line
+                style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"
+                x1="37.5" y1="25" x2="12.5" y2="25" />
+        </svg>
+    </span>
+</template>
+
+<style scoped lang="scss">
+.add-button {
+    z-index: 1;
+    width: 34px;
+    cursor: pointer;
+
+    svg {
+        position: relative;
+        left: 7px;
+        top: 3px;
+        transform: scale(.55);
+    }
+
+    &:hover {
+        path {
+            fill: #777;
+        }
+    }
+}
+</style>

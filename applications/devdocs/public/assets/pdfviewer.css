@@ -1,0 +1,8 @@
+.Header, .App:not(.is-in-desktop-only-mode) .Header {
+    height: 64px;
+    background-color: #F7F9FB !important;
+}
+
+.Icon {
+    color: #4A4A4A;
+}

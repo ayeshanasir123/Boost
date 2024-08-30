@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/6.0.0-beta2/js/tempus-dominus.js"></script>
+<body>
+
+<div id="kt_app_root">
+
+</div>
+
+<script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+
+
+
+    const app = createApp({
+        data() {
+            return {
+                orderTypeText: '',
+
+                printInvoice:false,
+                showMeasurement:false,
+                netAmountEx: 0,
+                totalAmountEx: 0,
+
+                vatAmount: 0,
+                netAmount: 0,
+                totalAmount: 0,
+
+                netTotalAmount: 0,
+                vatTotalAmount: 0,
+                grossAmount: 0,
+
+                selectedItemIndex: -1,
+                selectedOption:'',
+                showAutoComplete:0,
+
+
+                search: '',
+                sortBy: 'name',
+                sortDirection: 'asc',
+                documents:[],
+                customerSearch:'',
+                customerPopup: '',
+                deliveryLocations: null,
+                articleOptions: [],
+                selectedOrderRow: null,
+                orderLineTemplate: {UUID:"", note:"", lineItem: {id:0, itemUUID:"", quantity:"", quantityUnitCode:"", lineExtensionAmount:"", itemPriceAmountIncludesVat:"", itemClassifiedTaxCategoryCode:"", itemClassifiedTaxCategoryPercent:"", itemClassifiedTaxCategoryTaxSchemeId:"", itemSellersItemIdentificationId: "", itemName:"", itemDescription: "", itemPriceAmount:"", itemPriceAmountCurrencyCode:"", width:"", length:"", measurements:1}},
+                order : {"deliveryTermsDeliveryLocationId":null,"deliveryLocationAddressId":null,"status":"DRAFT","deliveryPartyId":null,"projectId":"","deliveryShipmentId":null,"customer":{"partyLegalCompanyId":null,"organizationNumber":null,"paymentTermsId":null,"partyIdentificationSchemeId":null,"GLN":null,"partyLegalCompanySchemeId":null,"email":null,"endpointId":null,"partyLegalCompanyLegalForm":null,"partyLegalRegistrationName":null,"foreignId":null,"ourCustomerNo":null,"deletedById":null,"partyTaxSchemeVatId":null,"defaultAgreementId":null,"IBAN":null,"updatedById":null,"name":"Invex AB","vatNumber":null,"languageCode":null,"countryCode":null,"roles":0,"web":null,"partyIdentificationId":null,"createdAt":"2023-11-28T14:47:47","theirInvoiceReferenceId":null,"partyTaxSchemeTaxId":null,"active":1,"bg":null,"phone":null,"SWIFT":null,"organizationId":"A62652C2-FD40-B551-64FBAD249A461102","notes":null,"defaultPaymentTypeId":null,"customerId":"A62652C2-FD40-B551-64FBAD249A461102","partyTaxSchemeId":null,"deletedAt":null,"identifier":"4617","defaultProjectId":null,"createdById":"","bankAccount":null,"ourInvoiceReferenceId":null,"endpointSchemeId":null,"updatedAt":null,"defaultPricelistUUID":null,"customerNumber":null,"currencyCode":null,"defaultCostCenterId":null,"masterDb":"Time","pg":null},"payableRoundingAmount":-0.19,"id":"2f15d94e-b7aa-4303-805f-c173428a1a3f","prepaidAmount":0.0,"costcenterCode":null,"personId":null,"billingAddressId":null,"taxExclusiveAmount":2296.19,"orderType":"STANDARD","taxInclusiveAmount":2605.19,"deliveryTermsId":null,"customizationId":"urn:fdc:peppol.eu:poacc:trns:order:3","ourReferencePersonId":null,"invoicePeriodDescriptionCode":null,"deliveryTermsSpecialTerms":null,"balance":2605.0,"requestedDeliveryPeriodEndDate":null,"lineExtensionAmount":2296.19,"contractId":null,"payableAmount":2605.0,"originatorCustomerPartyId":null,"orderReferencePurchaseorderReferenceId":null,"chargeTotalAmount":0.0,"createdAt":"2023-11-28T17:17:06","externalDocumentReferenceId":null,"requestedDeliveryPeriodStartDate":"2023-11-17","customerUUID":null,"createdByPerson":{"personId":"54ca7349-15bb-4c2a-9d26-809c6e66a578","mobilePhone":null,"active":1,"assignable":1,"phone":"","updatedAt":"2023-06-07T03:28:33","firstname":"Anders","email":"agustavsson@canmera.se","customerNumber":null,"updatedById":"","roles":0,"lastname":"Gustavsson","timeId":"C3488AAE-E36A-20E3-05ACC9B791BA875C","foreignId":null,"personalIdentityNumber":null,"createdAt":"2019-12-30T11:57:19","deletedAt":null,"identifier":null,"pictureId":null,"createdById":"","deletedById":null},"orderLines":[{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"beeb4699-cb24-43b9-9f91-4206d64bd9ce","itemUUID":null,"lineItem":{"created_at":null,"quantity":0.0,"accountNumber":0,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":10,"uuid":"beeb4699-cb24-43b9-9f91-4206d64bd9ce","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"SEK","itemUUID":null,"documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":0.0,"itemSellersItemIdentificationId":"","lineExtensionAmount":0.0,"itemPriceBaseQuantityUnitCode":"st","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"Ruskvädersgatan 10/Invex/Inkoppling kaffemaskin"},"sortorder":1,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"25da37a4-8ae9-4ebd-b044-98bee55e897a","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"TEXT"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"d3fc5d63-3ed6-41fc-85e5-6bdb73884183","itemUUID":null,"lineItem":{"created_at":null,"quantity":2.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":25.0,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":309.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":20,"uuid":"d3fc5d63-3ed6-41fc-85e5-6bdb73884183","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"9f7abd73-c393-4843-ace0-52fbf1592170","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":618.0,"itemSellersItemIdentificationId":"305","lineExtensionAmount":1236.0,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":"SEK","metadata":null,"itemName":"VVS-Montör inkl bil"},"sortorder":2,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"924e5924-a151-423b-a192-a00021bea046","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"ba1b31c4-7471-45a8-8a41-a0e8d2053946","itemUUID":null,"lineItem":{"created_at":null,"quantity":1.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":0,"uuid":"ba1b31c4-7471-45a8-8a41-a0e8d2053946","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"49603fd0-3543-486f-9398-cf8cd59d0117","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":535.9,"itemSellersItemIdentificationId":"301","lineExtensionAmount":535.9,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"FMM UTTAG F.BÄNKDISK"},"sortorder":3,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"a94113d4-23d2-4c56-8dee-60d954edd138","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"ee340a4b-64ce-4075-b1e3-8545a9b744bd","itemUUID":null,"lineItem":{"created_at":null,"quantity":1.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":0,"uuid":"ee340a4b-64ce-4075-b1e3-8545a9b744bd","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"49603fd0-3543-486f-9398-cf8cd59d0117","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":124.6,"itemSellersItemIdentificationId":"301","lineExtensionAmount":124.6,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"VA KULV.R15 UTV.GG"},"sortorder":4,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"46c85283-0d1f-4631-a4d5-0073d0a520e2","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"1b2bc738-bca7-4a70-a595-33d0de097da9","itemUUID":null,"lineItem":{"created_at":null,"quantity":1.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":0,"uuid":"1b2bc738-bca7-4a70-a595-33d0de097da9","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"49603fd0-3543-486f-9398-cf8cd59d0117","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":75.43,"itemSellersItemIdentificationId":"301","lineExtensionAmount":75.43,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"FKR.VA T-RÖR.KPL. 12 I"},"sortorder":5,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"8a22be3a-0829-4cea-9ae0-ffe27644afc3","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"0876244d-df1c-49b0-aab1-433a49a581d5","itemUUID":null,"lineItem":{"created_at":null,"quantity":2.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":0,"uuid":"0876244d-df1c-49b0-aab1-433a49a581d5","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"49603fd0-3543-486f-9398-cf8cd59d0117","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":68.82,"itemSellersItemIdentificationId":"301","lineExtensionAmount":137.64,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"VA DUBBELMUTTER 12mm"},"sortorder":6,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"5e566c28-03a8-4fb6-aa0b-5b428daf42e4","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"cbce298b-358d-48d1-9402-05e7de2c8ce7","itemUUID":null,"lineItem":{"created_at":null,"quantity":1.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":0,"uuid":"cbce298b-358d-48d1-9402-05e7de2c8ce7","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"49603fd0-3543-486f-9398-cf8cd59d0117","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":48.75,"itemSellersItemIdentificationId":"301","lineExtensionAmount":48.75,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"FKR.VA RAK 12xR15UTV sn"},"sortorder":7,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"dfc9be7b-7d7f-4d4f-9b5d-f59f1c0c5278","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"},{"updatedAt":"2023-11-28T17:17:06","lineItemUUID":"34687e83-732a-4716-8020-3215150084bb","itemUUID":null,"lineItem":{"created_at":null,"quantity":1.0,"accountNumber":null,"documentReferenceId":null,"itemClassifiedTaxCategoryPercent":null,"itemPriceAmountIncludesVat":0,"itemPriceAmountCurrencyCode":"SEK","totalTaxAmount":0.0,"itemStandardItemIdentificationId":null,"itemBuyersItemIdentificationId":null,"sortorder":0,"projectId":null,"itemPriceAllowanceChargeBaseAmountCurrencyCode":"SEK","updated_at":"2023-11-28T17:17:06","id":0,"uuid":"34687e83-732a-4716-8020-3215150084bb","itemOriginCountryIdentificationCode":null,"deliveryRequestedDeliveryPeriodStartDate":null,"deliveredQuantityUnitCode":"st","costcenterCode":null,"quantityUnitCode":"ST","itemUUID":"49603fd0-3543-486f-9398-cf8cd59d0117","documentReferenceDocumentTypeCode":null,"lineExtensionAmountCurrencyCode":"SEK","itemPriceAmount":137.87,"itemSellersItemIdentificationId":"301","lineExtensionAmount":137.87,"itemPriceBaseQuantityUnitCode":"ST","chargeTotalAmount":0.0,"taxInclusiveLineExtensionAmountCurrencyCode":null,"itemPriceBaseQuantity":1.0,"deliveryLocationSchemeId":null,"partialDeliveryIndicator":1,"originatorPartyId":null,"itemDescription":null,"itemStandardItemIdentificationSchemeId":null,"deliveryRequestedDeliveryPeriodEndDate":null,"itemClassifiedTaxCategoryCode":"S","itemClassifiedTaxCategoryTaxSchemeId":"VAT","note":null,"invoicePeriodEndDate":null,"itemPriceAllowanceChargeAmount":0.0,"itemPriceAllowanceChargeBaseAmount":0.0,"originatorPartyName":null,"taxInclusiveLineExtensionAmount":0.0,"deliveryDate":null,"deliveredQuantity":0.0,"allowanceTotalAmount":0.0,"deliveryLocationId":null,"invoicePeriodStartDate":null,"accountingCost":null,"orderLineReferenceId":null,"itemPriceAllowanceChargeAmountCurrencyCode":"SEK","itemPriceAllowanceChargeChargeIndicator":0,"totalTaxAmountCurrencyCode":null,"metadata":null,"itemName":"VA KULV. 12 M.VRED Zz &"},"sortorder":8,"note":null,"orderUUID":"2f15d94e-b7aa-4303-805f-c173428a1a3f","createdAt":"2023-11-28T17:17:06","deletedAt":null,"uuid":"78fd4b8d-acb9-4e76-a044-00c5db3c3933","metadata":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","type":"ARTICLE"}],"ourReference":null,"customerReference":"","projectReferenceId":null,"originatorDocumentReferenceId":"114287","issueDateTime":"2023-11-28T17:17:06","paymentTermsNote":null,"agreementPartyId":null,"organizationId":"A62652C2-FD40-B551-64FBAD249A461102","profileId":"urn:fdc:peppol.eu:poacc:bis:order_only:3","customerType":"Organization","quotationDocumentReferenceId":null,"customerReferencePersonId":null,"orderNumber":1263,"documentCurrencyCode":null,"note":null,"originatorOrganizationId":null,"accountingCustomerPartyId":"4221d0f9-2e58-45dd-b185-a672c63b29c8","deliveryShipmentTransportHandlingUnitShippingMarks":null,"deletedAt":null,"invoicePeriodStart":null,"contractType":null,"createdById":"54ca7349-15bb-4c2a-9d26-809c6e66a578","invoicePeriodEnd":null,"validityPeriodEndDate":null,"updatedAt":"2023-11-29T20:09:47","taxTotalTaxAmount":309.0,"orderDocumentReferenceId":null,"allowanceTotalAmount":0.0,"buyerCustomerPartyId":"4221d0f9-2e58-45dd-b185-a672c63b29c8","deliveryLocationId":null,"accountingCost":null,"originatorPersonId":null,"orderTypeCode":null,"sellerSupplierPartyId":null,"metadata":null,"deliveryLocationIdScheme":null},
+                orderGrid: [],
+                deletedRows: [],
+                customerResults: [],
+                loadingCustomers: false,
+                dueDatePicker: null,
+                orderDatePicker: null,
+                invoiceDatePicker: null,
+                paymentTerms: [{value:'30 dagar',paymentTermCode:"30days"},{value:'20 dagar',paymentTermCode:"20days"},{value:'10 dagar', paymentTermCode:"10days"},{value:'Wasa Kredit', paymentTermCode:"wasa_kredit"}]
+
+
+
+            }},
+        methods: {
+            setIssueDate(val) {
+                this.order.issueDateTime = val;
+                if (this.order.requestedDeliveryPeriodStartDate == null || this.order.requestedDeliveryPeriodStartDate.length == 0) {
+                    document.getElementById('dueDate').focus();
+                }
+            },
+            setDueDate(val) {
+                this.order.requestedDeliveryPeriodStartDate = val;
+                document.getElementById('orderGridLink').click();
+                this.$refs['gridSKU0'][0].focus();
+                this.selectedOrderRow = 0;
+            },
+            //kakan
+            saveOrder: function(){
+                this.order.orderLines = this.orderGrid.concat(this.deletedRows);
+
+                axios.post("/516B5804A8C33A70317ABB42E30E4DD0/cim/saveorder?id=2f15d94e-b7aa-4303-805f-c173428a1a3f", this.order).then((response) => {
+                        if (response.data.message != undefined) {
+                            alert(response.data.message);
+                        } else {
+                            if (this.order.id == null)
+                                window.location.href = "/516B5804A8C33A70317ABB42E30E4DD0/cim/orders?id=" + response.data.id;
+                            if (this.order.status == "EXPORT" || this.order.status == "DELETED")
+                                window.location.href = "/516B5804A8C33A70317ABB42E30E4DD0/cim/orders";
+
+                            this.order = response.data;
+                            this.deletedRows = [];
+                        }
+
+                    }
+                );
+
+            },
+            handleInput(event) {
+                this.selectedItemIndex = 0
+            },
+            arrowDown() {
+                if (this.selectedItemIndex < this.articleOptions.length - 1) {
+                    this.selectedItemIndex++
+                } else {
+                    this.selectedItemIndex = 0
+                }
+            },
+            arrowUp() {
+                if (this.selectedItemIndex > 0) {
+                    this.selectedItemIndex--;
+                } else {
+                    this.selectedItemIndex = this.articleOptions.length - 1;
+                }
+            },
+            selectCurrentOption() {
+                if (this.selectedItemIndex > -1) {
+                    this.selectOption(this.articleOptions[this.selectedItemIndex]);
+                }
+            },
+            insertGridRow(row, index) {
+                let maxitemId = 0;
+                for (let i=0; i < this.orderGrid.length; i++) {
+                    if (this.orderGrid[i].itemId > maxitemId)
+                        maxitemId = this.orderGrid[i].itemId;
+                }
+                maxitemId = maxitemId+5;
+
+                let newOrderlineObject = Object.assign({}, this.orderLineTemplate);
+                let newLineItemObject = Object.assign({}, this.orderLineTemplate.lineItem);
+                newOrderlineObject.itemId = maxitemId;
+                newOrderlineObject.lineItem = newLineItemObject;
+                this.orderGrid.splice(index, 0, Object.assign({}, newOrderlineObject));
+            },
+            deleteGridRow(row, index) {
+                /*
+                let inVisibleIndex = 0;
+                for (let i=0; i <= this.orderGrid.length ; i++) {
+                  console.log(i + " - " + inVisibleIndex + " - " + index)
+                  if (this.orderGrid[i].deletedAt != null)
+                    continue;
+
+                  if (index == inVisibleIndex) {
+                    this.orderGrid[i].deletedAt = new Date().toJSON();
+                    break;
+                  }
+
+                  inVisibleIndex++;
+                }*/
+
+                this.orderGrid[index].deletedAt = new Date().toJSON();
+
+                this.deletedRows.push(this.orderGrid[index]);
+
+                this.orderGrid.splice(index,1);
+                if (this.orderGrid.length < 3) {
+                    this.addGridRow(1);
+                }
+            },
+            selectOption(option) {
+
+                if (this.orderGrid.length-2 < this.selectedOrderRow) {
+                    this.addGridRow(1);
+                }
+
+                this.selectedOption = option;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemUUID = option.articleId;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemSellersItemIdentificationId = option.SKU;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemName = option.name;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemDescription = option.description;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemClassifiedTaxCategoryPercent = option.vat;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmountIncludesVat = option.includesVat;
+                this.orderGrid[this.selectedOrderRow].lineItem.itemClassifiedTaxCategoryCode = "S";
+                this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmount = (Math.round(option.price * 100) / 100).toFixed(2);
+
+                if (option.saleUnit.length)
+                    this.orderGrid[this.selectedOrderRow].lineItem.quantityUnitCode = option.saleUnit;
+
+                this.showOptions = false;
+                if (option.name.toLowerCase().includes("kvmabc")) {
+                    this.showMeasurement = true;
+                    this.$refs['gridwidth'+ this.selectedOrderRow][0].focus();
+                } else {
+                    this.$refs['gridqty'+ this.selectedOrderRow][0].focus();
+                }
+                this.selectedItemIndex = -1;
+                this.hideAllAutocompletes();
+            },
+            //kakan Slut
+            searchCustomer: async (value, self) => {
+
+                axios.get("/516B5804A8C33A70317ABB42E30E4DD0/cim/getCustomers?name=" + value).then((response) => {
+                        self.customerResults = response.data;
+
+                    }
+                );
+
+            },
+            updateDeliveryParties: function() {
+
+            },
+            selectCustomer: function(customer) {
+
+                axios.get("/516B5804A8C33A70317ABB42E30E4DD0/erp/getOrganization?id=" + customer.organizationId).then((response) => {
+                        this.order.customer = response.data;
+                        if (this.order.customer.organizationId != undefined ){
+                            this.order.organizationId = this.order.customer.organizationId;
+                            //this.order.accountingCustomerPartyId;
+                            this.order.originatorCustomerPartyId = this.order.customer.organizationId;
+                            this.order.buyerCustomerPartyId = this.order.customer.organizationId;
+                            this.customerSearch = this.order.customer.name;
+                        } else if (this.order.customer.personId != undefined){
+                            this.order.personId = this.order.customer.personId;
+                            this.order.buyerCustomerPartyId = this.order.customer.personId;
+                        }
+
+                        let deliveryAddress = null;
+                        let deliverAddressCount = 0;
+
+                        this.order.customer.addresses.forEach(address => {
+                                if (address.type == 'INVOICE') {
+                                    this.order.billingAddressId = address.addressId;
+                                    this.order.billingAddress = address;
+                                } else if (address.type == 'DELIVERY') {
+                                    deliveryAddress = address;
+                                    deliverAddressCount++;
+                                }
+                            }
+                        );
+
+                        if (deliverAddressCount == 1) {
+                            this.selectDeliveryAddress(deliveryAddress);
+                            document.getElementById('orderGridLink').click();
+                            if (this.order.issueDate == null || this.order.issueDate.length == 0) {
+                                document.getElementById('issueDate').focus();
+                            } else {
+                                this.$refs['gridSKU0'][0].focus();
+                                this.selectedOrderRow = 0;
+                            }
+                        }
+                    }
+                );
+
+                this.order.deliveryLocation = null;
+                //this.updateDeliveryParties();
+            },
+            selectDeliveryAddress: function(address) {
+                this.order.deliveryLocation = address;
+                this.order.deliveryParty = address.name;
+                this.order.deliveryLocationAddressId = address.addressId;
+                this.order.deliveryLocationAddress = address;
+                if (address.organizationId != null ){
+                    this.order.deliveryPartyId = address.organizationId
+                }
+                else if (address.personId != null){
+                    this.order.deliveryPartyId = address.personId
+                }
+                document.getElementById('orderGridLink').click();
+                if (this.order.issueDate == null || this.order.issueDate.length == 0) {
+                    document.getElementById('issueDate').focus();
+                } else {
+                    this.$refs['gridSKU0'][0].focus();
+                    this.selectedOrderRow = 0;
+                }
+                //this.updateDeliveryParties();
+            },
+            customerSelected: function(e) {
+                if (this.invoice.customer != null) {
+                    if (typeof this.invoice.customer.organizationId !== 'undefined') {
+                        this.invoice.organizationid = this.invoice.customer.organizationId;
+                    } else if (typeof this.invoice.customer.personId !== 'undefined') {
+                        this.invoice.personid = this.invoice.customer.personId;
+                    }
+                }
+            },
+            myFunction: function() {
+                axios.get("").then((response) => {
+                        this.foodlyData = response.data;
+                    }
+                );
+            },
+            toggleSort: function(newSortBy) {
+                if (this.sortBy == newSortBy) {
+                    if (this.sortDirection == 'asc')
+                        this.sortDirection = 'desc';
+                    else
+                        this.sortDirection = 'asc';
+                } else {
+                    this.sortBy = newSortBy;
+                    this.sortDirection = 'asc';
+                }
+            },
+            orderRowFocused: function(row, index) {
+                this.selectedOrderRow = index;
+                //alert(index);
+            },
+
+            autocompleteArticle: function(event, row, index) {
+                const autocompleteDiv = document.getElementById('autocompleteArticle');
+
+                if (row.lineItem.itemSellersItemIdentificationId < 2) {
+                    this.articleOptions = [];
+                    autocompleteDiv.style.display = 'none';
+                    return;
+                }
+
+
+                axios.get("/516B5804A8C33A70317ABB42E30E4DD0/erp/findArticles?name=" + row.lineItem.itemSellersItemIdentificationId).then((response) => {
+                        this.articleOptions = response.data.articles;
+                    }
+                );
+
+
+                autocompleteDiv.style.display = 'block';
+                // Position the relative div next to input 1
+                autocompleteDiv.style.top = event.target.getBoundingClientRect().bottom + 'px';
+                autocompleteDiv.style.left = event.target.getBoundingClientRect().left + 'px';
+            },
+            hideAllAutocompletes: function() {
+                const autocompleteDiv = document.getElementById('autocompleteArticle');
+                autocompleteDiv.style.display = 'none';
+            },
+            skuChanged: function() {
+                const autocompleteDiv = document.getElementById('autocompleteArticle');
+
+                //autocompleteDiv.style.display = 'none';
+            },
+            stepNext: function(index, field) {
+                const nextRow = index+1;
+                this.selectedOrderRow = index;
+                if (this.orderGrid.length-1 < nextRow) {
+                    this.addGridRow(1);
+                }
+
+                console.log(field);
+                console.log('gridSKU'+nextRow);
+
+                if (field === 'name') {
+                    this.$refs['gridqty'+ this.selectedOrderRow][0].focus();
+                } else if (field === 'width') {
+                    this.$refs['gridlength'+ this.selectedOrderRow][0].focus();
+                } else if (field === 'length') {
+                    this.orderGrid[this.selectedOrderRow].lineItem.measurements = parseFloat(((this.orderGrid[this.selectedOrderRow].lineItem.width/100)*(this.orderGrid[this.selectedOrderRow].lineItem.length/100)).toFixed(2))
+                    this.orderGrid[this.selectedOrderRow].lineItem.quantity = 1;
+                    this.orderGrid[this.selectedOrderRow].lineItem.quantityUnitCode = "ST";
+                    this.$refs['gridSKU'+nextRow][0].focus();
+                    this.selectedOrderRow++;
+                    this.calcAll();
+                    this.calcGrossAmount();
+                } else if (field === 'qty') {
+                    if (this.orderGrid[this.selectedOrderRow].lineItem.quantity.length) {
+                        this.orderGrid[this.selectedOrderRow].lineItem.quantity = this.orderGrid[this.selectedOrderRow].lineItem.quantity.replace(/,/g, '.');
+                        if (!this.orderGrid[this.selectedOrderRow].lineItem.quantityUnitCode.length) {
+                            this.$refs['gridqtyUnitCode'+ this.selectedOrderRow][0].focus();
+                        } else if (!this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmount.length) {
+                            this.$refs['gridPrice'+ this.selectedOrderRow][0].focus();
+                        } else {
+                            this.$refs['gridSKU'+nextRow][0].focus();
+                            this.selectedOrderRow++;
+                        }
+                    } else {
+                        this.$refs['gridSKU'+nextRow][0].focus();
+                        this.selectedOrderRow++;
+                    }
+                    this.calcAll();
+                    this.calcGrossAmount();
+                } else if (field === 'qtyUnitCode') {
+                    if (!this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmount.length) {
+                        this.$refs['gridPrice'+ this.selectedOrderRow][0].focus();
+                    } else {
+                        this.$refs['gridSKU'+nextRow][0].focus();
+                        this.selectedOrderRow++;
+                    }
+                } else {
+                    this.$refs['gridSKU'+nextRow][0].focus();
+                    this.selectedOrderRow++;
+                    this.calcAll();
+                    this.calcGrossAmount();
+                }
+            },
+            callCarpets: function() {
+                this.$refs['gridqty'+ this.selectedOrderRow][0].focus();
+            },
+            calcAll: function() {
+                for (let i=0; i < this.orderGrid.length; i++) {
+                    if (!isNaN(parseFloat(this.orderGrid[i].lineItem.quantity)) && !isNaN(parseFloat(this.orderGrid[i].lineItem.itemPriceAmount)))
+                        this.orderGrid[i].lineItem.lineExtensionAmount = parseFloat((Math.round(this.orderGrid[i].lineItem.itemPriceAmount * this.orderGrid[i].lineItem.quantity * 100) / 100).toFixed(2));
+                }
+            },
+            addGridRow: function(num = 1) {
+                let maxitemId = 0;
+                for (let i=0; i < this.orderGrid.length; i++) {
+                    if (this.orderGrid[i].itemId > maxitemId)
+                        maxitemId = this.orderGrid[i].itemId;
+                }
+                for (let c=1; c <= num; c++) {
+                    maxitemId = maxitemId+5;
+
+                    let newOrderlineObject = Object.assign({}, this.orderLineTemplate);
+                    let newLineItemObject = Object.assign({}, this.orderLineTemplate.lineItem);
+                    newOrderlineObject.itemId = maxitemId;
+                    newOrderlineObject.lineItem = newLineItemObject;
+                    this.orderGrid.push(Object.assign({}, newOrderlineObject));
+                }
+            },
+            calcGrossAmount: function () {
+
+                this.order.taxExclusiveAmount = 0;
+                this.order.taxTotalTaxAmount = 0;
+                this.order.taxInclusiveAmount = 0;
+
+                this.vatAmount = 0
+                this.netAmount = 0
+                this.totalAmount = 0
+
+                this.netTotalAmount = 0
+                this.vatTotalAmount = 0
+                this.grossAmount = 0
+
+                for (let item of this.orderGrid) {
+
+                    if(item.lineItem.hasOwnProperty('lineExtensionAmount') && typeof item.lineItem.lineExtensionAmount == 'number'){
+                        let taxMultiplierDivider = (item.lineItem.itemClassifiedTaxCategoryPercent/100)+1;
+
+                        if (item.lineItem.itemPriceAmountIncludesVat == 0) {
+                            this.netAmountEx += (Math.round(item.lineItem.lineExtensionAmount * 100) / 100)
+
+                            this.order.taxExclusiveAmount += parseFloat((Math.round(item.lineItem.lineExtensionAmount * 100) / 100).toFixed(2));
+                            this.order.taxInclusiveAmount += parseFloat((parseFloat((Math.round(item.lineItem.lineExtensionAmount * 100) / 100).toFixed(2))*taxMultiplierDivider).toFixed(2));
+
+                        } else {
+                            this.totalAmount += (Math.round(item.lineItem.lineExtensionAmount * 100) / 100)
+                        }
+
+                        this.netTotalAmount = (Math.round(this.netAmountEx + this.netAmount))
+                        this.grossAmount = (Math.round(this.totalAmount + this.totalAmountEx))
+                        this.vatTotalAmount = (Math.round(this.grossAmount -this.netTotalAmount))
+
+                    }
+                }
+
+                this.order.taxTotalTaxAmount += parseFloat((this.order.taxInclusiveAmount-this.order.taxExclusiveAmount).toFixed(2));
+
+            },
+            formatDate: function(dateString) {
+                const date = new Date(dateString);
+                // Then specify how you want your dates to be formatted
+                const dayOfWeek = new Intl.DateTimeFormat('sv-SE', {weekday: 'short'}).format(date);
+                const shortDateString = new Intl.DateTimeFormat('default', {dateStyle: 'short'}).format(date);
+                return shortDateString;
+            },
+            formatDateWithWeekday: function(dateString) {
+                const date = new Date(dateString);
+                // Then specify how you want your dates to be formatted
+                const dayOfWeek = new Intl.DateTimeFormat('sv-SE', {weekday: 'short'}).format(date);
+                const shortDateString = new Intl.DateTimeFormat('default', {dateStyle: 'short'}).format(date);
+                return dayOfWeek + ", " + shortDateString;
+            }
+        },
+        watch: {
+            customerSearch(value) {
+                if (!value || value.length < 2) {
+                    return
+                }
+                // Debounce the input and wait for a pause of at
+                // least 200 milliseconds. This can be changed to
+                // suit your needs.
+                this.searchCustomer(value, this);
+            }
+        },
+        mounted() {
+            if (this.order.issueDateTime == null) {
+                this.order.issueDateTime = '2023-11-29';
+            } else {
+                this.order.issueDateTime = this.formatDate(this.order.issueDateTime);
+            }
+            if (this.order.id != null) {
+                this.customerSearch = this.order.customer.name;
+                this.orderGrid = this.order.orderLines;
+
+                if (this.order.orderLines.length < 3) {
+                    this.addGridRow(3-this.order.orderLines.length);
+                } else {
+                    this.addGridRow(1);
+                }
+            } else {
+                this.addGridRow(3);
+            }
+
+            const pickerIssue = new tempusDominus.TempusDominus(document.getElementById("issueDate"), {
+                display: {
+                    viewMode: "calendar",
+                    components: {
+                        decades: true,
+                        year: true,
+                        month: true,
+                        date: true,
+                        hours: false,
+                        minutes: false,
+                        seconds: false
+                    }
+                },
+                localization: {
+                    startOfTheWeek: 1,
+                    locale: 'sv-SE',
+                    format: 'yyyy-MM-dd'
+                }
+            });
+
+            const pickerDue = new tempusDominus.TempusDominus(document.getElementById("dueDate"), {
+                display: {
+                    viewMode: "calendar",
+                    components: {
+                        decades: true,
+                        year: true,
+                        month: true,
+                        date: true,
+                        hours: false,
+                        minutes: false,
+                        seconds: false
+                    }
+                },
+                localization: {
+                    startOfTheWeek: 1,
+                    locale: 'sv-SE',
+                    format: 'yyyy-MM-dd'
+                }
+            });
+
+            const pickerIssueSubscription = pickerIssue.subscribe(tempusDominus.Namespace.events.change, (e) => {
+                console.log(e);
+                this.setIssueDate(this.formatDate(e.date));
+            });
+
+            const pickerDueSubscription = pickerDue.subscribe(tempusDominus.Namespace.events.change, (e) => {
+                console.log(e);
+                this.setDueDate(this.formatDate(e.date));
+            });
+
+            window.addEventListener("DOMContentLoaded", (event) => {
+
+                const inputs = document.querySelectorAll(".no-input-border");
+
+                const body = document.querySelector("body");
+
+                body.addEventListener("click", function (event) {
+                    hideAllAutocompletes();
+                });
+
+                inputs.forEach((input) => {
+
+                    const inputContainer = input.closest(".td-input-container");
+
+                    input.addEventListener("focus", function () {
+                        const previousTd = inputContainer.previousElementSibling;
+                        if (previousTd) {
+                            previousTd.classList.add('td-input-container-adjacent');
+                        }
+
+                        inputContainer.classList.add("focused");
+                    });
+
+                    input.addEventListener("blur", function () {
+                        const previousTd = inputContainer.previousElementSibling;
+                        if (previousTd) {
+                            previousTd.classList.remove('td-input-container-adjacent');
+                        }
+
+                        inputContainer.classList.remove("focused");
+                    });
+                });
+
+                document.getElementById('customerSearch').focus();
+            });
+
+            //document.getElementById('kt_ecommerce_products_table').style.visibility = 'visible';
+        },
+        computed: {
+            deliveryAddresses() {
+                if (this.order.customer.addresses == undefined)
+                    return true;
+
+                return this.order.customer.addresses.filter(obj => {
+                    if (obj.type === "DELIVERY")
+                        return true;
+
+                    //return false;
+                });
+            },
+            filteredList() {
+
+            }
+        }
+    }).mount('#kt_app_root');
+
+    function hideAllAutocompletes() {
+        const autocompleteDiv = document.getElementById('autocompleteArticle');
+        autocompleteDiv.style.display = 'none';
+    }
+
+</script>
+
+</body>
+</html>

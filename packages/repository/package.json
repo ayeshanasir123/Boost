@@ -1,0 +1,45 @@
+{
+  "name": "@boost/repository",
+  "version": "0.0.1",
+  "description": "Data stores and models.",
+  "main": "dist/repository.index.js",
+  "module": "dist/repository.index.js",
+  "types": "dist/types/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/repository.index.js",
+      "require": "./dist/repository.index.js"
+    },
+    "./models/accounting": "./dist/repository.models/accounting.js",
+    "./models/sales": "./dist/repository.models/sales.js",
+    "./models/tasks": "./dist/repository.models/Tod.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vue-tsc --project tsconfig.json",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@boost/eslint-config-boost": "workspace:*",
+    "@boost/shared": "workspace:*",
+    "@boost/utils": "workspace:*",
+    "@types/node": "20.14.10",
+    "@vue-flow/core": "^1.38.5",
+    "@vue/tsconfig": "^0.5.1",
+    "axios": "^1.7.2",
+    "eslint": "8.56.0",
+    "pinia": "^2.1.7",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.8",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0",
+    "vue-tsc": "^2.0.21"
+  },
+  "dependencies": {
+    "date-fns": "^3.6.0"
+  }
+}

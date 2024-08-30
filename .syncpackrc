@@ -1,0 +1,16 @@
+{
+  "versionGroups": [
+    {
+      "label": "Use workspace protocol when developing local packages",
+      "dependencies": ["@boost/ui", "@boost/repository", "@boost/shared", "@boost/utils", "@boost/eslint-config-boost"],
+      "dependencyTypes": ["dev","prod","peer"],
+      "pinVersion": "workspace:*"
+    },
+    {
+      "label": "Use eslint 8.56.0 due to breaking changes in version 9",
+      "dependencies": ["eslint"],
+      "dependencyTypes": ["dev","prod","peer"],
+      "pinVersion": "8.56.0"
+    }
+  ]
+}

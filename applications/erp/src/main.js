@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// import './assets/style.css';
+require("@css/style.css");
+var vue_1 = require("vue");
+var initialize_plugins_1 = require("./plugins/initialize-plugins");
+var app_vue_1 = require("./app.vue");
+var router_1 = require("./router");
+var app = (0, vue_1.createApp)(app_vue_1.default);
+(0, initialize_plugins_1.initializePlugins)(app, false);
+app.use((0, router_1.createNewRouter)(false));
+app.mount('#app');

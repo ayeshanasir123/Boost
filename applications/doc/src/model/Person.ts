@@ -1,0 +1,48 @@
+export default interface Person {
+    "personId": string;
+    "identifier": string;
+    "firstname": string;
+    "lastname": string;
+    "personalIdentityNumber": string;
+    "email": string;
+    "mobilePhone": string;
+    "timeId": string;
+    "assignable": number;
+    "createdAt": Date;
+    "createdById": string;
+    "updatedAt": Date;
+    "gridVersion": boolean;
+    "active": number;
+    "roles": number;
+    partyLegalRegistrationName: string | null;
+    partyLegalCompanyId: string | null;
+    vatNumber: string | null;
+    countryCode: string | null;
+    currencyCode: string | null;
+    phone: string | null;
+    web: string | null;
+    languageCode: string | null;
+    notes: string | null;
+    paymentTermsUUID: string | null;
+    deliveryTermsUUID: string | null;
+    deliveryMethodUUID: string | null;
+    invoiceDiscountPercentage: number | null;
+    invoiceBuyerReference: string | null;
+    invoiceNote: string | null;
+    invoiceFrequency: string | null;
+    invoiceFee: number | null;
+    deliveryFee: number | null;
+    invoiceAccountingCost: string | null;
+    invoiceEmail: string | null;
+    invoiceEmailCC: string | null;
+    defaultPricelistUUID: string | null;
+    defaultAgreementUUID: string | null;
+    orderToInvoiceMergeRows: boolean | null;
+    orderInfotext: string | null;
+    orderInfoPopup: string | null;
+    invoiceInfotext: string | null;
+    invoiceInfoPopup: string | null;
+    taxCode: string | null;  // Added taxCode
+    orderToInvoiceMergeOrders: boolean | null;
+    orderToInvoiceAddDeliveryFee: boolean | null;
+}

@@ -1,0 +1,46 @@
+{
+  "name": "@boost/shared",
+  "version": "0.0.1",
+  "description": "Generic shared UI components.",
+  "main": "dist/shared.index.js",
+  "module": "dist/shared.index.js",
+  "types": "dist/types/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/shared.index.js",
+      "require": "./dist/shared.index.js"
+    },
+    "./composables/defineShortcuts": {
+      "import": "./dist/composables/defineShortcuts.js",
+      "types": "./dist/types/composables/defineShortcuts.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npx vue-tsc --project tsconfig.json",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0",
+    "@vueuse/core": "^10.11.0",
+    "@vueuse/math": "^10.11.0",
+    "@vueuse/shared": "^10.11.0",
+    "@boost/eslint-config-boost": "workspace:*",
+    "@types/node": "20.14.10",
+    "@vue/tsconfig": "^0.5.1",
+    "axios": "^1.7.2",
+    "eslint": "8.56.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.8",
+    "vue-tsc": "^2.0.21",
+    "jquery": "^3.7.1"
+  },
+  "dependencies": {
+  }
+}

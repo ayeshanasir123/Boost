@@ -1,0 +1,590 @@
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script type="module">
+        import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+           
+		
+    const app = createApp({
+            data() {
+            return {
+				orderTypeText: '',
+
+				printInvoice:false,
+				showMeasurement:false,
+				netAmountEx: 0,
+				totalAmountEx: 0,
+
+				vatAmount: 0,
+				netAmount: 0,
+				totalAmount: 0, 
+
+				netTotalAmount: 0, 
+				vatTotalAmount: 0,
+				grossAmount: 0,
+
+				    selectedItemIndex: -1,
+        		    selectedOption:'',
+					showAutoComplete:0,
+					
+
+                search: '',
+                sortBy: 'name',
+                sortDirection: 'asc',
+                documents:[],
+				customerSearch:'',
+				customerPopup: '',
+				deliveryLocations: null,
+                articleOptions: [],
+				selectedOrderRow: null,
+				orderLineTemplate: {UUID:"", note:"", lineItem: {id:0, itemUUID:"", quantity:"", quantityUnitCode:"", lineExtensionAmount:"", itemPriceAmountIncludesVat:"", itemClassifiedTaxCategoryCode:"", itemClassifiedTaxCategoryPercent:"", itemClassifiedTaxCategoryTaxSchemeId:"", itemSellersItemIdentificationId: "", itemName:"", itemDescription: "", itemPriceAmount:"", itemPriceAmountCurrencyCode:"", width:"", length:"", measurements:1}},
+                order : {"deliveryTermsDeliveryLocationId":null,"deliveryLocationAddressId":null,"ORDERID":"new","status":"DRAFT","deliveryPartyId":null,"projectId":null,"deliveryShipmentId":null,"payableRoundingAmount":null,"id":null,"prepaidAmount":null,"costcenterCode":null,"personId":null,"billingAddressId":null,"taxExclusiveAmount":null,"orderType":"STANDARD","taxInclusiveAmount":null,"deliveryTermsId":null,"customizationId":null,"ourReferencePersonId":null,"invoicePeriodDescriptionCode":null,"deliveryTermsSpecialTerms":null,"balance":null,"requestedDeliveryPeriodEndDate":null,"lineExtensionAmount":null,"contractId":null,"payableAmount":null,"originatorCustomerPartyId":null,"orderReferencePurchaseorderReferenceId":null,"chargeTotalAmount":null,"createdAt":null,"externalDocumentReferenceId":null,"requestedDeliveryPeriodStartDate":null,"orderLines":[],"ourReference":null,"customerReference":null,"projectReferenceId":null,"originatorDocumentReferenceId":null,"issueDateTime":null,"paymentTermsNote":null,"agreementPartyId":null,"organizationId":null,"profileId":null,"quotationDocumentReferenceId":null,"customerReferencePersonId":null,"orderNumber":null,"documentCurrencyCode":null,"note":null,"originatorOrganizationId":null,"accountingCustomerPartyId":null,"deliveryShipmentTransportHandlingUnitShippingMarks":null,"deletedAt":null,"invoicePeriodStart":null,"contractType":null,"createdById":null,"invoicePeriodEnd":null,"validityPeriodEndDate":null,"updatedAt":null,"taxTotalTaxAmount":null,"orderDocumentReferenceId":null,"allowanceTotalAmount":null,"buyerCustomerPartyId":null,"deliveryLocationId":null,"accountingCost":null,"originatorPersonId":null,"orderTypeCode":null,"sellerSupplierPartyId":null,"metadata":{},"deliveryLocationIdScheme":null},
+				orderGrid: [],
+				deletedRows: [],
+                customerResults: [],
+                loadingCustomers: false,
+                dueDatePicker: null,
+                orderDatePicker: null,
+                invoiceDatePicker: null,
+                paymentTerms: [{value:'30 dagar',paymentTermCode:"30days"},{value:'20 dagar',paymentTermCode:"20days"},{value:'10 dagar', paymentTermCode:"10days"},{value:'Wasa Kredit', paymentTermCode:"wasa_kredit"}]
+                
+
+
+            }},
+            methods: {
+                setIssueDate(val) {
+                    this.order.issueDateTime = val;
+					if (this.order.requestedDeliveryPeriodStartDate == null || this.order.requestedDeliveryPeriodStartDate.length == 0) {
+						document.getElementById('dueDate').focus();
+					}
+                },
+                setDueDate(val) {
+                    this.order.requestedDeliveryPeriodStartDate = val;
+					document.getElementById('orderGridLink').click();
+					this.$refs['gridSKU0'][0].focus();
+					this.selectedOrderRow = 0;
+                },
+			//kakan
+				saveOrder: function(){
+					this.order.orderLines = this.orderGrid.concat(this.deletedRows);
+					
+					axios.post("/9C3272CA08CD7CD5DE1BB0968B67EA47/cim/saveorder?id=new", this.order).then((response) => {
+                        if (response.data.message != undefined) {
+                            alert(response.data.message);
+                        } else {
+                            if (this.order.id == null)
+                                window.location.href = "/9C3272CA08CD7CD5DE1BB0968B67EA47/cim/orders?id=" + response.data.id;
+                            if (this.order.status == "EXPORT" || this.order.status == "DELETED")
+                                window.location.href = "/9C3272CA08CD7CD5DE1BB0968B67EA47/cim/orders";
+
+                            this.order = response.data;
+							this.deletedRows = [];
+                        }
+
+						}  		
+					);
+
+				},
+				handleInput(event) {
+					this.selectedItemIndex = 0
+				},
+				arrowDown() {
+				if (this.selectedItemIndex < this.articleOptions.length - 1) {
+					this.selectedItemIndex++ 
+				} else {
+					this.selectedItemIndex = 0
+				}
+				},
+				arrowUp() {
+					if (this.selectedItemIndex > 0) {
+						this.selectedItemIndex--;
+					} else {
+						this.selectedItemIndex = this.articleOptions.length - 1;
+					}
+				},
+				selectCurrentOption() {  
+					if (this.selectedItemIndex > -1) {
+						this.selectOption(this.articleOptions[this.selectedItemIndex]);
+					}
+				},
+				insertGridRow(row, index) {
+					let maxitemId = 0;
+					for (let i=0; i < this.orderGrid.length; i++) {
+						if (this.orderGrid[i].itemId > maxitemId)
+							maxitemId = this.orderGrid[i].itemId;
+					}
+					maxitemId = maxitemId+5;
+
+					let newOrderlineObject = Object.assign({}, this.orderLineTemplate);
+					let newLineItemObject = Object.assign({}, this.orderLineTemplate.lineItem);
+					newOrderlineObject.itemId = maxitemId;
+					newOrderlineObject.lineItem = newLineItemObject;
+					this.orderGrid.splice(index, 0, Object.assign({}, newOrderlineObject));
+				},
+				deleteGridRow(row, index) {
+					/*
+					let inVisibleIndex = 0;
+					for (let i=0; i <= this.orderGrid.length ; i++) {
+						console.log(i + " - " + inVisibleIndex + " - " + index)
+						if (this.orderGrid[i].deletedAt != null)
+							continue;
+
+						if (index == inVisibleIndex) {
+							this.orderGrid[i].deletedAt = new Date().toJSON();
+							break;
+						}
+
+						inVisibleIndex++;
+					}*/
+
+					this.orderGrid[index].deletedAt = new Date().toJSON();
+
+					this.deletedRows.push(this.orderGrid[index]);			
+					
+					this.orderGrid.splice(index,1);
+                    if (this.orderGrid.length < 3) {
+						this.addGridRow(1);
+					}
+				},
+				selectOption(option) {
+
+					if (this.orderGrid.length-2 < this.selectedOrderRow) {
+						this.addGridRow(1);
+					}
+					
+					this.selectedOption = option;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemUUID = option.articleId;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemSellersItemIdentificationId = option.SKU;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemName = option.name;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemDescription = option.description;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemClassifiedTaxCategoryPercent = option.vat;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmountIncludesVat = option.includesVat;
+					this.orderGrid[this.selectedOrderRow].lineItem.itemClassifiedTaxCategoryCode = "S";
+					this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmount = (Math.round(option.price * 100) / 100).toFixed(2);
+
+					if (option.saleUnit.length)
+						this.orderGrid[this.selectedOrderRow].lineItem.quantityUnitCode = option.saleUnit;
+
+					this.showOptions = false;
+					if (option.name.toLowerCase().includes("kvmabc")) {
+						this.showMeasurement = true;
+						this.$refs['gridwidth'+ this.selectedOrderRow][0].focus();
+					} else {
+						this.$refs['gridqty'+ this.selectedOrderRow][0].focus();
+					}
+					this.selectedItemIndex = -1;
+					this.hideAllAutocompletes();
+				},
+			//kakan Slut	
+			searchCustomer: async (value, self) => {
+				
+				axios.get("/9C3272CA08CD7CD5DE1BB0968B67EA47/cim/getCustomers?name=" + value).then((response) => {
+						self.customerResults = response.data;
+					
+					}  		
+				);
+				
+			},
+			updateDeliveryParties: function() {
+
+			},
+			selectCustomer: function(customer) {
+				
+					axios.get("/9C3272CA08CD7CD5DE1BB0968B67EA47/erp/getOrganization?id=" + customer.organizationId).then((response) => {
+						this.order.customer = response.data;
+						if (this.order.customer.organizationId != undefined ){
+							this.order.organizationId = this.order.customer.organizationId;
+							//this.order.accountingCustomerPartyId;
+							this.order.originatorCustomerPartyId = this.order.customer.organizationId;
+							this.order.buyerCustomerPartyId = this.order.customer.organizationId;
+							this.customerSearch = this.order.customer.name;
+						} else if (this.order.customer.personId != undefined){
+							this.order.personId = this.order.customer.personId;
+							this.order.buyerCustomerPartyId = this.order.customer.personId;
+						}
+
+						let deliveryAddress = null;
+						let deliverAddressCount = 0;
+
+						this.order.customer.addresses.forEach(address => {
+								if (address.type == 'INVOICE') {
+									this.order.billingAddressId = address.addressId;
+									this.order.billingAddress = address;
+								} else if (address.type == 'DELIVERY') {
+									deliveryAddress = address;
+									deliverAddressCount++;
+								}
+							}
+						);
+
+						if (deliverAddressCount == 1) {
+							this.selectDeliveryAddress(deliveryAddress);
+							document.getElementById('orderGridLink').click();
+							if (this.order.issueDate == null || this.order.issueDate.length == 0) {
+								document.getElementById('issueDate').focus();
+							} else {
+								this.$refs['gridSKU0'][0].focus();
+								this.selectedOrderRow = 0;
+							}
+						}
+					}  		
+				);
+				
+				this.order.deliveryLocation = null;
+				//this.updateDeliveryParties();
+			},
+			selectDeliveryAddress: function(address) {
+				this.order.deliveryLocation = address;
+				this.order.deliveryParty = address.name;
+				this.order.deliveryLocationAddressId = address.addressId;
+				this.order.deliveryLocationAddress = address;
+				if (address.organizationId != null ){
+					this.order.deliveryPartyId = address.organizationId
+				}
+				else if (address.personId != null){
+					this.order.deliveryPartyId = address.personId
+				}
+				document.getElementById('orderGridLink').click();
+				if (this.order.issueDate == null || this.order.issueDate.length == 0) {
+					document.getElementById('issueDate').focus();
+				} else {
+					this.$refs['gridSKU0'][0].focus();
+					this.selectedOrderRow = 0;
+				}
+				//this.updateDeliveryParties();
+			},
+			customerSelected: function(e) {
+				if (this.invoice.customer != null) {
+					if (typeof this.invoice.customer.organizationId !== 'undefined') {
+						this.invoice.organizationid = this.invoice.customer.organizationId;
+					} else if (typeof this.invoice.customer.personId !== 'undefined') {
+						this.invoice.personid = this.invoice.customer.personId;
+					}
+				}
+			},
+                myFunction: function() {
+                    axios.get("").then((response) => {
+                            this.foodlyData = response.data;
+                            }  		
+                        );
+                    },
+                toggleSort: function(newSortBy) {
+                    if (this.sortBy == newSortBy) {
+                        if (this.sortDirection == 'asc')
+                            this.sortDirection = 'desc';
+                        else   
+                            this.sortDirection = 'asc';
+                    } else {
+                        this.sortBy = newSortBy;                        
+                        this.sortDirection = 'asc';
+                    }
+                },
+				orderRowFocused: function(row, index) {
+					this.selectedOrderRow = index;
+					//alert(index);
+				},
+			
+                autocompleteArticle: function(event, row, index) {
+                    const autocompleteDiv = document.getElementById('autocompleteArticle');
+
+							if (row.lineItem.itemSellersItemIdentificationId < 2) {
+								this.articleOptions = [];
+								autocompleteDiv.style.display = 'none';
+								return;
+							}
+
+                    
+                    axios.get("/9C3272CA08CD7CD5DE1BB0968B67EA47/erp/findArticles?name=" + row.lineItem.itemSellersItemIdentificationId).then((response) => {
+				    		this.articleOptions = response.data.articles;
+		        		}  		
+	    			);
+    				
+
+                    autocompleteDiv.style.display = 'block';
+                    // Position the relative div next to input 1
+                    autocompleteDiv.style.top = event.target.getBoundingClientRect().bottom + 'px';
+                    autocompleteDiv.style.left = event.target.getBoundingClientRect().left + 'px';                    
+                },
+				hideAllAutocompletes: function() {
+                    const autocompleteDiv = document.getElementById('autocompleteArticle');
+                    autocompleteDiv.style.display = 'none';
+				},
+                skuChanged: function() {
+                    const autocompleteDiv = document.getElementById('autocompleteArticle');
+
+                    //autocompleteDiv.style.display = 'none';
+                },
+				stepNext: function(index, field) {
+					const nextRow = index+1;
+					this.selectedOrderRow = index;
+					if (this.orderGrid.length-1 < nextRow) {
+						this.addGridRow(1);
+					}
+
+					console.log(field);
+					console.log('gridSKU'+nextRow);
+
+					if (field === 'name') {
+						this.$refs['gridqty'+ this.selectedOrderRow][0].focus();
+					} else if (field === 'width') {
+						this.$refs['gridlength'+ this.selectedOrderRow][0].focus();
+					} else if (field === 'length') {
+						this.orderGrid[this.selectedOrderRow].lineItem.measurements = parseFloat(((this.orderGrid[this.selectedOrderRow].lineItem.width/100)*(this.orderGrid[this.selectedOrderRow].lineItem.length/100)).toFixed(2))
+                        this.orderGrid[this.selectedOrderRow].lineItem.quantity = 1;
+						this.orderGrid[this.selectedOrderRow].lineItem.quantityUnitCode = "ST";
+						this.$refs['gridSKU'+nextRow][0].focus();
+						this.selectedOrderRow++;
+						this.calcAll();
+						this.calcGrossAmount();
+					} else if (field === 'qty') {
+						if (this.orderGrid[this.selectedOrderRow].lineItem.quantity.length) {		
+							this.orderGrid[this.selectedOrderRow].lineItem.quantity = this.orderGrid[this.selectedOrderRow].lineItem.quantity.replace(/,/g, '.');
+							if (!this.orderGrid[this.selectedOrderRow].lineItem.quantityUnitCode.length) {							
+								this.$refs['gridqtyUnitCode'+ this.selectedOrderRow][0].focus();						
+							} else if (!this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmount.length) {
+								this.$refs['gridPrice'+ this.selectedOrderRow][0].focus();						
+							} else {
+								this.$refs['gridSKU'+nextRow][0].focus();
+								this.selectedOrderRow++;
+							}
+						} else {
+							this.$refs['gridSKU'+nextRow][0].focus();
+							this.selectedOrderRow++;
+						}
+						this.calcAll();
+						this.calcGrossAmount();
+					} else if (field === 'qtyUnitCode') {
+						if (!this.orderGrid[this.selectedOrderRow].lineItem.itemPriceAmount.length) {
+							this.$refs['gridPrice'+ this.selectedOrderRow][0].focus();						
+						} else {
+							this.$refs['gridSKU'+nextRow][0].focus();
+							this.selectedOrderRow++;
+						}
+					} else {
+						this.$refs['gridSKU'+nextRow][0].focus();
+						this.selectedOrderRow++;
+						this.calcAll();
+						this.calcGrossAmount();
+					}
+				},
+				callCarpets: function() {
+					this.$refs['gridqty'+ this.selectedOrderRow][0].focus();
+				},
+				calcAll: function() {
+					for (let i=0; i < this.orderGrid.length; i++) {
+						if (!isNaN(parseFloat(this.orderGrid[i].lineItem.quantity)) && !isNaN(parseFloat(this.orderGrid[i].lineItem.itemPriceAmount)))
+							this.orderGrid[i].lineItem.lineExtensionAmount = parseFloat((Math.round(this.orderGrid[i].lineItem.itemPriceAmount * this.orderGrid[i].lineItem.quantity * 100) / 100).toFixed(2));			
+					}
+				},
+				addGridRow: function(num = 1) {
+					let maxitemId = 0;
+					for (let i=0; i < this.orderGrid.length; i++) {
+						if (this.orderGrid[i].itemId > maxitemId)
+							maxitemId = this.orderGrid[i].itemId;
+					}
+					for (let c=1; c <= num; c++) {		
+						maxitemId = maxitemId+5;
+
+						let newOrderlineObject = Object.assign({}, this.orderLineTemplate);
+						let newLineItemObject = Object.assign({}, this.orderLineTemplate.lineItem);
+						newOrderlineObject.itemId = maxitemId;
+						newOrderlineObject.lineItem = newLineItemObject;
+						this.orderGrid.push(Object.assign({}, newOrderlineObject));
+					}
+				},
+				calcGrossAmount: function () {
+
+					this.order.taxExclusiveAmount = 0;
+					this.order.taxTotalTaxAmount = 0;
+					this.order.taxInclusiveAmount = 0;
+					
+					this.vatAmount = 0
+					this.netAmount = 0 
+					this.totalAmount = 0 
+
+					this.netTotalAmount = 0 
+					this.vatTotalAmount = 0
+					this.grossAmount = 0
+					
+						for (let item of this.orderGrid) {
+
+							if(item.lineItem.hasOwnProperty('lineExtensionAmount') && typeof item.lineItem.lineExtensionAmount == 'number'){
+								let taxMultiplierDivider = (item.lineItem.itemClassifiedTaxCategoryPercent/100)+1;
+
+								if (item.lineItem.itemPriceAmountIncludesVat == 0) {
+									this.netAmountEx += (Math.round(item.lineItem.lineExtensionAmount * 100) / 100)
+
+									this.order.taxExclusiveAmount += parseFloat((Math.round(item.lineItem.lineExtensionAmount * 100) / 100).toFixed(2));
+									this.order.taxInclusiveAmount += parseFloat((parseFloat((Math.round(item.lineItem.lineExtensionAmount * 100) / 100).toFixed(2))*taxMultiplierDivider).toFixed(2));
+
+								} else {
+									this.totalAmount += (Math.round(item.lineItem.lineExtensionAmount * 100) / 100)
+								}
+
+								this.netTotalAmount = (Math.round(this.netAmountEx + this.netAmount))
+								this.grossAmount = (Math.round(this.totalAmount + this.totalAmountEx))
+								this.vatTotalAmount = (Math.round(this.grossAmount -this.netTotalAmount))								
+								
+							}
+						}
+					
+						this.order.taxTotalTaxAmount += parseFloat((this.order.taxInclusiveAmount-this.order.taxExclusiveAmount).toFixed(2));																
+					
+           		},
+				formatDate: function(dateString) {
+					const date = new Date(dateString);
+					// Then specify how you want your dates to be formatted
+					const dayOfWeek = new Intl.DateTimeFormat('sv-SE', {weekday: 'short'}).format(date);
+					const shortDateString = new Intl.DateTimeFormat('default', {dateStyle: 'short'}).format(date);
+					return shortDateString;
+				},
+				formatDateWithWeekday: function(dateString) {
+					const date = new Date(dateString);
+					// Then specify how you want your dates to be formatted
+					const dayOfWeek = new Intl.DateTimeFormat('sv-SE', {weekday: 'short'}).format(date);
+					const shortDateString = new Intl.DateTimeFormat('default', {dateStyle: 'short'}).format(date);
+					return dayOfWeek + ", " + shortDateString;
+				}
+			},
+			watch: {
+				customerSearch(value) {
+					if (!value || value.length < 2) {
+						return
+					}
+					// Debounce the input and wait for a pause of at 
+					// least 200 milliseconds. This can be changed to 
+					// suit your needs.
+					this.searchCustomer(value, this);
+				}	
+			},
+            mounted() {
+				if (this.order.issueDateTime == null) {
+					this.order.issueDateTime = '2023-11-17';
+                } else {
+                    this.order.issueDateTime = this.formatDate(this.order.issueDateTime);
+                }
+				if (this.order.id != null) {
+                    this.customerSearch = this.order.customer.name;
+					this.orderGrid = this.order.orderLines;
+
+					if (this.order.orderLines.length < 3) {
+						this.addGridRow(3-this.order.orderLines.length);
+					} else {
+						this.addGridRow(1);
+					}
+				} else {
+					this.addGridRow(3);
+				}
+
+                    const pickerIssue = new tempusDominus.TempusDominus(document.getElementById("issueDate"), {
+                        display: {
+                            viewMode: "calendar",
+                            components: {
+                                decades: true,
+                                year: true,
+                                month: true,
+                                date: true,
+                                hours: false,
+                                minutes: false,
+                                seconds: false
+                            }
+                        },
+                        localization: {
+                            startOfTheWeek: 1,
+                            locale: 'sv-SE',
+                            format: 'yyyy-MM-dd'                            
+                        }
+                    });
+
+                    const pickerDue = new tempusDominus.TempusDominus(document.getElementById("dueDate"), {
+                        display: {
+                            viewMode: "calendar",
+                            components: {
+                                decades: true,
+                                year: true,
+                                month: true,
+                                date: true,
+                                hours: false,
+                                minutes: false,
+                                seconds: false
+                            }
+                        },
+                        localization: {
+                            startOfTheWeek: 1,
+                            locale: 'sv-SE',
+                            format: 'yyyy-MM-dd'                            
+                        }
+                    });
+
+                    const pickerIssueSubscription = pickerIssue.subscribe(tempusDominus.Namespace.events.change, (e) => {
+                        console.log(e);
+                        this.setIssueDate(this.formatDate(e.date));
+                    });
+
+                    const pickerDueSubscription = pickerDue.subscribe(tempusDominus.Namespace.events.change, (e) => {
+                        console.log(e);
+                        this.setDueDate(this.formatDate(e.date));
+                    });
+
+					window.addEventListener("DOMContentLoaded", (event) => {
+
+					const inputs = document.querySelectorAll(".no-input-border");
+
+					const body = document.querySelector("body");
+
+					body.addEventListener("click", function (event) {
+						hideAllAutocompletes();
+					});						
+
+					inputs.forEach((input) => {
+
+						const inputContainer = input.closest(".td-input-container");
+
+						input.addEventListener("focus", function () {
+							const previousTd = inputContainer.previousElementSibling;
+							if (previousTd) {
+						        previousTd.classList.add('td-input-container-adjacent');
+							}
+
+							inputContainer.classList.add("focused");
+						});
+
+						input.addEventListener("blur", function () {
+							const previousTd = inputContainer.previousElementSibling;
+							if (previousTd) {
+						        previousTd.classList.remove('td-input-container-adjacent');
+							}
+
+							inputContainer.classList.remove("focused");
+						});
+					});
+
+					document.getElementById('customerSearch').focus();
+					});					
+
+					//document.getElementById('kt_ecommerce_products_table').style.visibility = 'visible';                
+            },
+             computed: {
+				deliveryAddresses() {
+					if (this.order.customer.addresses == undefined)
+						return true;
+
+					return this.order.customer.addresses.filter(obj => {
+						if (obj.type === "DELIVERY")
+							return true;
+
+					//return false;
+					});
+				},
+                filteredList() {
+					
+                }
+              }
+        }).mount('#kt_app_root');
+		
+		function hideAllAutocompletes() {
+			const autocompleteDiv = document.getElementById('autocompleteArticle');
+            autocompleteDiv.style.display = 'none';
+		}
+
+    </script>

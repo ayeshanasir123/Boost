@@ -1,0 +1,9 @@
+{
+    "client":"mysql2",
+    "connection": {
+      "host": "172.16.200.41",
+      "user": "boostdev",
+      "password": "XQ8RXzdU4h",
+      "database" : "portal_dev"
+    }
+  }
